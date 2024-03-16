@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  fastapi_service:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    hostname: fastapi_service
+    container_name: fastapi_service
+    ports:
+      - "80:80"
+    env_file:
+      - ./server/.env
+    volumes:
+      - ./server/app:/home/app
+    networks:
+      - backend-net
+
+  cache-redis:
+    image: redis:alpine
+    hostname: cache-redis
+    container_name: cache-redis
+    restart: on-failure
+    ports:
+      - '6379:6379'
+    expose:
+      - '6379'
+    command: redis-server
+    volumes:
+      - cache:/data
+    networks:
+      - backend-net
+      - frontend-net
+
+  react_frontend:
+    image: weather_client:latest
+    hostname: react_frontend
+    container_name: react_frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - frontend-net
+
+
+volumes:
+  cache:
+    driver: local
+
+networks:
+  backend-net:
+
+  frontend-net:
