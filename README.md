@@ -23,7 +23,7 @@ The whole system is packed into docker-compose, which builds both the back-end a
 
 ### React front-end
 The react front-end has been created using the create-react-app build tool.
-It has 3 main components:
+Its code is in `client` folder and it has 3 main components (in src directory):
 - `Header.jsx`: the nav bar of the app, which contain the icon (AI generated and edited manually), the app title and the search bar. In smaller screens (phone sized) the title disappear, giving the whole nav bar space to the search bar. The nav bar is "elevated" when the user scroll down;
 - `Body.jsx`: it contains the actual body of the app, where the weather observations are shown. It calls the */cities* GET API to retrieve the cities array from the back-end, and maps them into many cards. Each of these card is wrapped in a `RenderIfVisible` component, which renders the cards only if they are near the viewport, avoiding useles API calls for weather observations of cities that are not visible. The map function only return the cards if the city name match with the string the string that is inserted in the search input, allowing the user to filter the results. A regex is used for this aim;
 - `CityCard.jsx`: it contains the actual weather observation, retrieved from the back-end using the */weather/{city_name}* GET API. Along with the city name, the air temperature and wind info are shown in the card: these are side by side in large screens, in column in smaller screens (phone sized). While waiting for API response, a MUI `Skeleton` component is used as placeholder.
