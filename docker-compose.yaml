@@ -33,7 +33,9 @@ services:
       - frontend-net
 
   react_frontend:
-    image: weather_client:latest
+    build:
+      context: ./client
+      dockerfile: Dockerfile
     hostname: react_frontend
     container_name: react_frontend
     ports:
