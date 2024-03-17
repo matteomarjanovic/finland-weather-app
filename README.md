@@ -31,7 +31,7 @@ It has 3 main components:
 ### FastAPI back-end
 The back-end server has been implemented in Python, using the FastAPI framework. The two provided APIs are implemented in `server/app/main.py` file. In order to see the Swagger documentation, go to the following link while the app is up and running:
 ```
-http://localhost:80/docs
+http://localhost:8000/docs
 ```
 
 The */weather/{city_name}* API has a dependency called `redis_client`, which provides the Redis cache support. For that reason, every time a result is retrieved from FMI Open APIs, this is cached and an expiration timeout is set for that city. The timeout (in minutes) is defined in the `server/.env` file, as the `CACHE_TIMEOUT_MIN` environment variable. The value is set to 30 minutes since the daily limit for FMI Open APIs is 20000 calls, so it's easily computable that, even getting observations for all the 357 cities every 30 minutes (worst case) that limit won't be surpassed.
