@@ -17,7 +17,7 @@ const Body = ({ searchedCity }) => {
 
     async function getCities() {
         const cities = await fetch(
-            "http://127.0.0.1:80/cities",
+            `${process.env.REACT_APP_SERVER_BASE_URL}/cities`,
             { method: 'GET' }
         ).then((response) => response.json())
         

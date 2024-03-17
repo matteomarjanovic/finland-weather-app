@@ -1,8 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 
 const fontFamily = '"Capriola", sans-serif'
-const fontWeight = 400
-const fontStyle = 'normal'
 
 export const theme = createTheme({
   palette: {

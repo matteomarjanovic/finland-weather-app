@@ -28,18 +28,18 @@ const Search = styled('div')(({ theme }) => ({
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.secondary.main, 0.75),
     '&:hover': {
-      backgroundColor: alpha(theme.palette.secondary.main, 1),
+        backgroundColor: alpha(theme.palette.secondary.main, 1),
     },
     marginRight: theme.spacing(2),
     marginLeft: '15px',
     width: '100%',
     [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
+        marginLeft: theme.spacing(3),
+        width: 'auto',
     },
-  }));
-  
-  const SearchIconWrapper = styled('div')(({ theme }) => ({
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 2),
     height: '100%',
     position: 'absolute',
@@ -48,34 +48,41 @@ const Search = styled('div')(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'center',
     color: theme.palette.primary.main
-  }));
-  
-  const StyledInputBase = styled(InputBase)(({ theme }) => ({
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: theme.palette.primary.main,
     '& .MuiInputBase-input': {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('md')]: {
-        width: '20ch',
-      },
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('md')]: {
+            width: '20ch',
+        },
     },
-  }));
+}));
 
-const Header = ({ searchedCity, setSearchedCity }) => {
-    // const [ searchedCity, setSearchedCity ] = React.useState('')
+const Header = ({ searchedCity, setSearchedCity, pageTopRef }) => {
+    const scrollToTop = () => pageTopRef.current.scrollIntoView({ behavior: "smooth" })
 
     return (
         <ElevationScroll>
             <AppBar>
                 <Toolbar>
-                    {/* <Icon> */}
-                        <img height='40px' src={logo} alt='Logo' />
-                    {/* </Icon> */}
-                    <Typography variant="h6" component="div" marginLeft='10px' display={{ xs: 'none', sm: 'flex' }}>
-                        Finland Weather App
+                    <Box sx={{ '&:hover': { cursor: "pointer" } }}>
+                        <img height='40px' src={logo} alt='Logo' onClick={scrollToTop} />
+                    </Box>
+                    <Typography
+                        variant="h6"
+                        component="div"
+                        marginLeft='10px'
+                        display={{ xs: 'none', sm: 'flex' }}
+                        onClick={scrollToTop}
+                        sx={{ '&:hover': { cursor: "pointer" } }}
+                    >
+                        Finland Weather
                     </Typography>
                     <Box flexGrow={1}></Box>
                     <Search>
@@ -86,7 +93,10 @@ const Header = ({ searchedCity, setSearchedCity }) => {
                             placeholder="Search city…"
                             inputProps={{ 'aria-label': 'search' }}
                             value={searchedCity}
-                            onChange={e => setSearchedCity(e.target.value)}
+                            onChange={e => {
+                                setSearchedCity(e.target.value)
+                                scrollToTop()
+                            }}
                         />
                     </Search>
                 </Toolbar>

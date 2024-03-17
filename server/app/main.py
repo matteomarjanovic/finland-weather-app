@@ -23,7 +23,7 @@ app.add_middleware(
     allow_headers=['*']
 )
 
-
+# schemas for responses
 class City(BaseModel):
     name: str
 
@@ -53,6 +53,7 @@ async def get_weather_by_city_name(city_name: str, redis_client: cache = Depends
     start_time = start_time.isoformat(timespec="seconds") + "Z"
     end_time = end_time.isoformat(timespec="seconds") + "Z"
 
+    # use fmi opendata python library to fetch weather observation
     observations = download_stored_query(
         "fmi::observations::weather::multipointcoverage",
         args=[
@@ -62,6 +63,7 @@ async def get_weather_by_city_name(city_name: str, redis_client: cache = Depends
         ]
     )
 
+    # if no observations about given city is found, return "empty" object
     if not list(observations.data.keys()):
         result = Weather(
             city_name=city_name,
@@ -69,8 +71,8 @@ async def get_weather_by_city_name(city_name: str, redis_client: cache = Depends
             wind_speed=None,
             wind_direction=None
         )
-        redis_client.set(city_name, pickle.dumps(result))
-        redis_client.expire(city_name, redis_timeout_seconds)
+        redis_client.set(city_name, pickle.dumps(result))   # save in redis cache
+        redis_client.expire(city_name, redis_timeout_seconds)   # set val timeout in redis cache
         return result
 
     latest_tstep = max(list(observations.data.keys()))
@@ -87,7 +89,7 @@ async def get_weather_by_city_name(city_name: str, redis_client: cache = Depends
         wind_direction=None if isnan(wind_dir) else wind_dir
     )
 
-    redis_client.set(city_name, pickle.dumps(weather_observation))
-    redis_client.expire(city_name, redis_timeout_seconds)
+    redis_client.set(city_name, pickle.dumps(weather_observation))  # save in redis cache
+    redis_client.expire(city_name, redis_timeout_seconds)   # set val timeout in redis cache
 
     return weather_observation

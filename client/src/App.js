@@ -9,12 +9,13 @@ import { useTheme } from '@emotion/react';
 function App() {
     const [ searchedCity, setSearchedCity ] = React.useState('')
     const theme = useTheme()
+    const pageTopRef = React.useRef(null)
 
     return (
         <div className="App" style={{backgroundColor: theme.palette.secondary.main}}>
-            <Header searchedCity={searchedCity} setSearchedCity={setSearchedCity} />
-            <Toolbar />
-            <Body searchedCity={searchedCity} />
+            <Header searchedCity={searchedCity} setSearchedCity={setSearchedCity} pageTopRef={pageTopRef} />
+            <Toolbar ref={pageTopRef} />
+            <Body searchedCity={searchedCity} pageTopRef={pageTopRef} />
             <Toolbar sx={{height: '80vh'}} />
         </div>
     );
